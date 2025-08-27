@@ -12,28 +12,69 @@ import "../styles/global.css";
   </head>
   <body>
     <div
-      class="bg-linear-65 from-orange-600 to-amber-500 h-screen w-screen flex justify-center"
+      class="bg-linear-65 from-orange-600 to-amber-500 min-h-screen w-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
     >
-      <div class="drop-shadow-2xl rounded-2xl m-40 w-screen bg-gray-800">
-        <div>
-          <!-- postcard preview -->
+      <div
+        class="drop-shadow-2xl rounded-2xl bg-gray-800 flex flex-col md:flex-row w-full max-w-6xl overflow-hidden"
+      >
+        <!-- Left side: Postcard preview -->
+        <div
+          class="p-4 md:p-8 lg:p-10 flex justify-center items-center md:w-1/2"
+        >
+          <div class="aspect-[148/105] bg-pink-500 w-full max-w-md">
+            <!-- shader bg -->
+            <p>p</p>
+          </div>
         </div>
 
-        <div>
-          <div>
+        <!-- Right side: Controls -->
+        <div
+          class="p-4 md:p-8 lg:p-10 md:w-1/2 flex flex-col justify-between text-white"
+        >
+          <div class="mb-4">
             <!-- text entry -->
+            <h3 class="text-lg mb-2 font-bold">Enter your message</h3>
+            <label for="large-input" class="block mb-2 text-sm font-medium"
+              >Large input</label
+            >
+            <input
+              type="text"
+              id="large-input"
+              class="block w-full p-4 border rounded-lg text-base bg-gray-700 border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
 
-          <div>
+          <div class="mb-4">
             <!-- shader select -->
+            <h3 class="text-lg mb-2 font-bold">Select shader</h3>
+            <select
+              id="countries"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option selected>Choose a shader</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
           </div>
 
-          <div>
+          <div class="mb-4">
             <!-- sliders -->
+            <h3 class="text-lg mb-2 font-bold">Customize</h3>
+            <label for="volume" class="block mb-2 text-sm font-medium"
+              >Speed</label
+            >
+            <input type="range" id="volume" name="volume" min="0" max="100" />
           </div>
 
           <div>
             <!-- submit -->
+            <button
+              class="bg-amber-600 hover:bg-amber-700 active:bg-amber-800 py-2 px-4 rounded cursor-pointer font-bold"
+            >
+              Send Postcard
+            </button>
           </div>
         </div>
       </div>
