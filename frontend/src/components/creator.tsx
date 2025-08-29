@@ -13,7 +13,7 @@ export default function Creator({
   // keep initial consistent with SSR to avoid hydration warnings
   const [value, setValue] = useState(() => initial ?? "");
   const [name, setName] = useState(() => initial ?? "");
-  const [speed, setSpeed] = useState(() => initial ?? "1");
+  const [speed, setSpeed] = useState(() => initial ?? 1);
 
   return (
     <div className="drop-shadow-2xl rounded-2xl bg-gray-800 flex flex-col md:flex-row w-full max-w-6xl overflow-hidden">
@@ -102,6 +102,7 @@ export default function Creator({
             min={0.1}
             max={2.0}
             step={0.01}
+            defaultValue={1}
           />
         </div>
 

@@ -22,7 +22,8 @@ function ShaderPlane({ speed }: ShaderInput) {
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.uniforms.u_time.value = state.clock.elapsedTime * speed;
+      meshRef.current.uniforms.u_time.value =
+        state.clock.elapsedTime * (speed || 1);
       meshRef.current.uniforms.u_resolution.value.set(size.width, size.height);
     }
   });
