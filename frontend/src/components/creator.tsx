@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ShaderBox from "../components/shader";
 
 interface CreatorProps {
   title?: string;
@@ -17,22 +18,25 @@ export default function Creator({
     <div className="drop-shadow-2xl rounded-2xl bg-gray-800 flex flex-col md:flex-row w-full max-w-6xl overflow-hidden">
       <div className="p-4 md:p-8 lg:p-10 flex justify-center items-center md:w-1/2">
         <div className="aspect-[148/105] bg-pink-500 w-full max-w-md text-white relative overflow-hidden drop-shadow-2xl rounded-xs">
-          <p className="mt-4 text-3xl font-bold m-auto max-w-fit limelight-regular">
+          <div className="absolute inset-0 w-full h-full">
+            <ShaderBox />
+          </div>
+          <p className="mt-4 text-2xl font-bold m-auto max-w-fit limelight-regular relative z-10">
             {title}
           </p>
-          <p className="left-3 bottom-4 w-5/12 h-7/12 absolute text-center wrap-anywhere delius-swash-caps-regular ">
+          <p className="left-3 bottom-4 w-5/12 h-7/12 absolute text-center center wrap-anywhere delius-swash-caps-regular z-10 items-center justify-center flex">
             {value ? (
-              value.split("\n").map((line, i) => (
-                <React.Fragment key={i}>
+              value.split("\n").map((line, index) => (
+                <React.Fragment key={`line-${index}-${line.substring(0, 10)}`}>
                   {line}
-                  {i < value.split("\n").length - 1 && <br />}
+                  {index < value.split("\n").length - 1 && <br />}
                 </React.Fragment>
               ))
             ) : (
-              <em>Nothing yet</em>
+              <em></em>
             )}
           </p>
-          <p className="absolute right-10 bottom-12 -rotate-12 text-center w-27 wrap-anywhere delius-swash-caps-regular text-xl">
+          <p className="absolute right-10 bottom-12 -rotate-12 text-center w-27 wrap-anywhere delius-swash-caps-regular text-xl z-10">
             to: <br /> {name || <em>cutie</em>}
           </p>
         </div>

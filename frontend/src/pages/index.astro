@@ -18,7 +18,11 @@ import PostcardCreator from "../components/creator.jsx";
     <div
       class="bg-linear-65 from-orange-600 to-amber-500 min-h-screen w-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
     >
-      <PostcardCreator client:load initial="" title="Here is a test title" />
+      <PostcardCreator
+        client:only="react"
+        initial=""
+        title="Greetings from the internet"
+      />
     </div>
   </body>
 </html>
