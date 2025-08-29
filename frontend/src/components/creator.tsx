@@ -13,13 +13,14 @@ export default function Creator({
   // keep initial consistent with SSR to avoid hydration warnings
   const [value, setValue] = useState(() => initial ?? "");
   const [name, setName] = useState(() => initial ?? "");
+  const [speed, setSpeed] = useState(() => initial ?? "1");
 
   return (
     <div className="drop-shadow-2xl rounded-2xl bg-gray-800 flex flex-col md:flex-row w-full max-w-6xl overflow-hidden">
       <div className="p-4 md:p-8 lg:p-10 flex justify-center items-center md:w-1/2">
         <div className="aspect-[148/105] bg-pink-500 w-full max-w-md text-white relative overflow-hidden drop-shadow-2xl rounded-xs">
           <div className="absolute inset-0 w-full h-full">
-            <ShaderBox />
+            <ShaderBox speed={+speed} />
           </div>
           <p className="mt-4 text-2xl font-bold m-auto max-w-fit limelight-regular relative z-10">
             {title}
@@ -93,7 +94,15 @@ export default function Creator({
           <label htmlFor="volume" className="block mb-2 text-sm font-medium">
             Speed
           </label>
-          <input type="range" id="volume" name="volume" min="0" max="100" />
+          <input
+            type="range"
+            id="volume"
+            name="volume"
+            onChange={(e) => setSpeed(e.target.value)}
+            min={0.1}
+            max={2.0}
+            step={0.01}
+          />
         </div>
 
         <div>

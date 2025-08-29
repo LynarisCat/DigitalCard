@@ -4,7 +4,11 @@ import { ShaderMaterial, Vector2 } from "three";
 import vertexShader from "./sphere.vertex.glsl?raw";
 import fragmenShader from "./sphere.fragment.glsl?raw";
 
-function ShaderPlane() {
+type ShaderInput = {
+  speed: number;
+};
+
+function ShaderPlane({ speed }: ShaderInput) {
   const meshRef = useRef<ShaderMaterial>(null);
   const { size } = useThree();
 
@@ -18,7 +22,7 @@ function ShaderPlane() {
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.uniforms.u_time.value = state.clock.elapsedTime;
+      meshRef.current.uniforms.u_time.value = state.clock.elapsedTime * speed;
       meshRef.current.uniforms.u_resolution.value.set(size.width, size.height);
     }
   });
@@ -47,10 +51,10 @@ function ShaderPlane() {
   );
 }
 
-export default function ThreeCanvas() {
+export default function ThreeCanvas({ speed }: Readonly<ShaderInput>) {
   return (
     <Canvas camera={{ position: [0, 0, 1], fov: 75 }}>
-      <ShaderPlane />
+      <ShaderPlane speed={speed} />
     </Canvas>
   );
 }
