@@ -41,20 +41,13 @@ function ShaderPlane({ speed, shaderNr, color }: Readonly<ShaderInput>) {
     }
   });
 
-  const postcardAspect = 148 / 105;
-  const canvasAspect = size.width / size.height;
-  let planeWidth, planeHeight;
-  if (canvasAspect > postcardAspect) {
-    planeHeight = 2;
-    planeWidth = planeHeight * canvasAspect;
-  } else {
-    planeWidth = 2;
-    planeHeight = planeWidth / canvasAspect;
-  }
+  const vfov = (75 * Math.PI) / 180; // camera.fov in radians
+  const height = 2 * Math.tan(vfov / 2);
+  const width = height * (size.width / size.height);
 
   return (
-    <mesh>
-      <planeGeometry args={[planeWidth, planeHeight]} />
+    <mesh key={`${size.width}-${size.height}`}>
+      <planeGeometry args={[width, height]} />
       <shaderMaterial
         key={`shader-${shaderNr}`} // Force recreation when shader changes
         ref={meshRef}

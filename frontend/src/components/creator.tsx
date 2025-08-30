@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ShaderBox from "../components/shader";
+import Preview from "../components/cardpreview";
 
 interface CreatorProps {
   title?: string;
@@ -10,66 +10,24 @@ export default function Creator({
   initial = "",
   title = "Title",
 }: Readonly<CreatorProps>) {
-  // keep initial consistent with SSR to avoid hydration warnings
-  const [value, setValue] = useState(() => initial ?? "");
+  const [text, setText] = useState(() => initial ?? "");
   const [name, setName] = useState(() => initial ?? "");
   const [speed, setSpeed] = useState<number>(() => 1);
   const [color, setColor] = useState<number>(() => 1);
-  const [shaderNr, setShaderNr] = useState<number>(() => 0); // Start with first shader (index 0)
+  const [shaderNr, setShaderNr] = useState<number>(() => 0);
 
   return (
     <div className="drop-shadow-2xl rounded-2xl bg-gray-800 flex flex-col md:flex-row w-full max-w-6xl overflow-hidden">
-      <div className="p-4 md:p-6 lg:p-8 flex justify-center items-center md:w-1/2">
-        <div className="aspect-[148/105] bg-pink-500 w-full max-w-md text-gray-700 relative overflow-hidden drop-shadow-2xl rounded-xs">
-          <div className="absolute inset-0 w-full h-full">
-            <ShaderBox speed={speed} shaderNr={shaderNr} color={color} />
-          </div>
-          <p
-            className="mt-4 text-4xl font-extrabold m-auto max-w-fit pl-10 pr-10 text-center limelight-regular relative z-10 text-white drop-shadow-lg"
-            style={{
-              textShadow:
-                "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)",
-            }}
-          >
-            {title}
-          </p>
-          <div className="flex items-center justify-center w-5/12 h-7/12">
-            <p
-              className="text-white left-3 bottom-4 w-5/12 max-h-7/12 p-2 h-fit absolute rounded-2xl text-center wrap-anywhere delius-swash-caps-regular z-10 items-center justify-center flex"
-              style={{
-                textShadow: "1px 1px 3px rgba(0,0,0,0.9)",
-                backgroundColor: "rgba(0,0,0,0.3)",
-                backdropFilter: "blur(3px)",
-                borderColor: "rgba(255,255,255,0.6)",
-              }}
-            >
-              {value ? (
-                value.split("\n").map((line, index) => (
-                  <React.Fragment
-                    key={`line-${index}-${line.substring(0, 10)}`}
-                  >
-                    {line}
-                    {index < value.split("\n").length - 1 && <br />}
-                  </React.Fragment>
-                ))
-              ) : (
-                <em className="opacity-50"> Your message here..</em>
-              )}
-            </p>
-          </div>
-          <p
-            className="absolute right-10 bottom-12 -rotate-12 text-center w-27 wrap-anywhere delius-swash-caps-regular text-xl z-10 outline-dashed rounded-2xl p-2 outline-2 text-white font-semibold"
-            style={{
-              textShadow: "1px 1px 3px rgba(0,0,0,0.9)",
-              backgroundColor: "rgba(0,0,0,0.3)",
-              backdropFilter: "blur(3px)",
-              borderColor: "rgba(255,255,255,0.6)",
-            }}
-          >
-            to: <br /> {name || <em className="opacity-80">cutie</em>}
-          </p>
-        </div>
-      </div>
+      <Preview
+        title={title}
+        initial={initial}
+        text={text}
+        name={name}
+        speed={speed}
+        color={color}
+        shaderNr={shaderNr}
+      />
+
       <div className="p-4 md:p-8 lg:p-10 md:w-1/2 flex flex-col justify-between text-white">
         <div className="mb-4">
           <h3 className="text-lg mb-2 font-bold m-auto">Enter details</h3>
@@ -95,10 +53,10 @@ export default function Creator({
           <textarea
             id="large-input"
             className="block w-full p-4 pl-2 border rounded-lg text-base bg-gray-700 border-gray-600 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
             placeholder="Type your message here.."
-            maxLength={100}
+            maxLength={80}
             rows={8}
           />
         </div>
