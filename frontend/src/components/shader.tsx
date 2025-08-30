@@ -2,8 +2,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo } from "react";
 import { ShaderMaterial, Vector2 } from "three";
 import vertexShader from "./shaders/test.vertex.glsl?raw";
-import fragmenShader from "./shaders/test.fragment.glsl?raw";
-
+import fragmentShader from "./shaders/test.fragment.glsl?raw";
 import fragShad1 from "./shaders/1.fragment.glsl?raw";
 import fragShad2 from "./shaders/2.fragment.glsl?raw";
 

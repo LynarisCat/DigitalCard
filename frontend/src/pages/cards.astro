@@ -1,0 +1,81 @@
+---
+import Preview from "../components/cardpreview";
+import { supabase } from "../lib/supabase";
+
+import "../styles/global.css";
+
+export const prerender = false;
+
+interface Card {
+  id: string;
+  title: string;
+  message: string;
+  name: string;
+  speed: number;
+  color: number;
+  shader: number;
+  created_at: string;
+}
+
+const id = Astro.url.searchParams.get("id");
+
+if (!id) {
+  return Astro.redirect("/404");
+}
+
+let card: Card | null = null;
+let error: string | null = null;
+
+try {
+  const { data, error: supabaseError } = await supabase
+    .from("cards")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (supabaseError) {
+    console.error("Supabase error:", supabaseError);
+    error = supabaseError.message;
+  } else {
+    card = data;
+  }
+} catch (err) {
+  console.error("Error fetching card:", err);
+  error = "Failed to fetch card data";
+}
+
+if (!card) {
+  return Astro.redirect("/404");
+}
+
+const pageTitle = card?.title || "Card Not Found";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div
+      class="bg-linear-65 from-orange-600 to-amber-500 min-h-screen w-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
+    >
+      <div
+        class="rounded-2xl flex flex-col md:flex-row w-full overflow-hidden items-center justify-center h-full"
+      >
+        <Preview
+          title={card!.title}
+          initial=""
+          text={card!.message}
+          name={card!.name}
+          speed={card!.speed}
+          color={card!.color}
+          shaderNr={card!.shader}
+          client:only="react"
+        />
+      </div>
+    </div>
+  </body>
+</html>

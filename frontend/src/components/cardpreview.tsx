@@ -2,23 +2,23 @@ import React, { useState } from "react";
 import ShaderBox from "../components/shader";
 
 interface PreviewProps {
-  title: string;
-  initial: string;
-  text: string;
-  name: string;
-  speed: number;
-  color: number;
-  shaderNr: number;
+  title?: string;
+  initial?: string;
+  text?: string;
+  name?: string;
+  speed?: number;
+  color?: number;
+  shaderNr?: number;
 }
 
 export default function Preview({
   initial = "",
   title = "Title",
-  text,
-  name,
-  speed,
-  color,
-  shaderNr,
+  text = "no text",
+  name = "no name",
+  speed = 1,
+  color = 10,
+  shaderNr = 1,
 }: Readonly<PreviewProps>) {
   return (
     <div className="p-4 md:p-6 lg:p-8 flex justify-center items-center md:w-1/2">

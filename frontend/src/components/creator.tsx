@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Preview from "../components/cardpreview";
+import Popup from "../components/Popup";
+import { saveCard } from "../lib/cardService.js";
 
 interface CreatorProps {
   title?: string;
@@ -15,6 +17,63 @@ export default function Creator({
   const [speed, setSpeed] = useState<number>(() => 1);
   const [color, setColor] = useState<number>(() => 1);
   const [shaderNr, setShaderNr] = useState<number>(() => 0);
+
+  // Popup states
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [generatedLink, setGeneratedLink] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const handleGenerateLink = async () => {
+    if (!name.trim()) {
+      setError("Please enter a name before generating the link.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const cardData = {
+        title: title.trim(),
+        name: name.trim(),
+        text: text.trim(),
+        speed,
+        color,
+        shaderNr,
+      };
+
+      const result = await saveCard(cardData);
+
+      if (result.success) {
+        const link = `${window.location.origin}/cards?id=${result.cardId}`;
+        setGeneratedLink(link);
+        setIsPopupOpen(true);
+      } else {
+        setError(result.error || "Failed to generate link. Please try again.");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
+      console.error("Generate link error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+    setGeneratedLink("");
+    setError("");
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(generatedLink);
+      // You could add a toast notification here
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
 
   return (
     <div className="drop-shadow-2xl rounded-2xl bg-gray-800 flex flex-col md:flex-row w-full max-w-6xl overflow-hidden">
@@ -110,11 +169,51 @@ export default function Creator({
         </div>
 
         <div>
-          <button className="bg-amber-600 hover:bg-amber-700 active:bg-amber-800 py-2 px-4 rounded cursor-pointer font-bold">
-            Generate Postcard Link
+          {error && (
+            <div className="mb-4 p-3 bg-red-600 rounded text-white text-sm">
+              {error}
+            </div>
+          )}
+          <button
+            onClick={handleGenerateLink}
+            disabled={isLoading}
+            className="bg-amber-600 hover:bg-amber-700 active:bg-amber-800 disabled:bg-gray-600 disabled:cursor-not-allowed py-2 px-4 rounded cursor-pointer font-bold w-full"
+          >
+            {isLoading ? "Generating..." : "Generate Postcard Link"}
           </button>
         </div>
       </div>
+
+      <Popup
+        isOpen={isPopupOpen}
+        onClose={handleClosePopup}
+        title="Postcard Link Generated!"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-gray-300">
+            Your postcard has been saved! Share this link with your friends:
+          </p>
+
+          <div className="bg-gray-700 p-3 rounded break-all text-sm">
+            {generatedLink}
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={copyToClipboard}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded text-sm font-medium"
+            >
+              Copy Link
+            </button>
+            <button
+              onClick={() => window.open(generatedLink, "_blank")}
+              className="flex-1 bg-green-600 hover:bg-green-700 py-2 px-4 rounded text-sm font-medium"
+            >
+              View Postcard
+            </button>
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 }
