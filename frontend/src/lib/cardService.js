@@ -5,8 +5,14 @@ function generateCardId() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
+localStorage.setItem('nextCard', new Date().valueOf());
+
 // Save card data to Supabase
 export async function saveCard(cardData) {
+  if( localStorage.getItem('nextCard') > new Date().valueOf()){
+    return{success: false, error: "Please wait 3 minutes between generating cards."};
+  }
+
   try {
     const cardId = generateCardId();
     const { data, error } = await supabase
@@ -29,6 +35,7 @@ export async function saveCard(cardData) {
       throw error;
     }
 
+    localStorage.setItem('nextCard', new Date().valueOf() + 3*60*1000);
     return { success: true, cardId, data };
   } catch (error) {
     console.error('Error saving card:', error);
