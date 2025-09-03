@@ -5,11 +5,11 @@ function generateCardId() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-localStorage.setItem('nextCard', new Date().valueOf());
+// localStorage.setItem('nextCard', new Date().valueOf());
 
 // Save card data to Supabase
 export async function saveCard(cardData) {
-  if( localStorage.getItem('nextCard') > new Date().valueOf()){
+  if( (localStorage.getItem('nextCard') || 0) > new Date().valueOf()){
     return{success: false, error: "Please wait 3 minutes between generating cards."};
   }
 
